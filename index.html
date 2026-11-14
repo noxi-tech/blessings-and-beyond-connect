@@ -11,17 +11,43 @@
   <title>Blessings & Beyond | Connection Hub</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
-  <!-- Google Fonts: Plus Jakarta Sans -->
+  <!-- Instant Theme Execution (Eliminates Flash of Wrong Theme) -->
+  <script>
+    try {
+      var t = localStorage.getItem('preferred-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+      var m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', t === 'dark' ? '#0b111a' : '#f8fafc');
+    } catch (e) { }
+  </script>
+
+  <!-- High-priority DNS prefetch & Preconnect for external destinations -->
+  <link rel="dns-prefetch" href="https://g.page" />
+  <link rel="preconnect" href="https://g.page" crossorigin />
+  <link rel="dns-prefetch" href="https://www.google.com" />
+  <link rel="dns-prefetch" href="https://www.instagram.com" />
+
+  <!-- Preload critical assets -->
+  <link rel="preload" as="image" href="assets/logo.svg" type="image/svg+xml" fetchpriority="high" />
+  <link rel="preload" href="styles.css" as="style" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Asynchronous, non-render-blocking font loading with instant system font fallback -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-    rel="stylesheet" />
-
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" media="print"
+    onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" />
+  </noscript>
 </head>
 
 <body>
-  <!-- Ambient background glow accent -->
+  <!-- Ambient background glow accent (GPU composited) -->
   <div class="ambient-glow" aria-hidden="true"></div>
 
   <!-- Mobile-first single-column container (max-width: 480px, centered) -->
@@ -31,7 +57,7 @@
     <div class="top-bar">
       <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark/light theme" title="Toggle Theme">
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="3"></line>
           <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -43,7 +69,7 @@
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
         </svg>
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       </button>
@@ -52,7 +78,8 @@
     <!-- 1. HEADER SECTION -->
     <header class="header-section">
       <div class="logo-container">
-        <img src="assets/logo.svg" alt="Blessings & Beyond Logo" class="logo-img" />
+        <img src="assets/logo.svg" alt="Blessings & Beyond Logo" class="logo-img" width="84" height="84"
+          fetchpriority="high" decoding="async" />
       </div>
       <h1 class="business-name">Blessings & Beyond</h1>
       <p class="welcome-message">
@@ -84,17 +111,6 @@
         </svg>
       </a>
     </section>
-
-    <!-- 3. MODULAR PROMO / VIP SIGN-UP SLOT (Uncomment whenever ready to activate) -->
-    <!--
-    <div class="modular-slot active" aria-live="polite">
-      <div class="promo-card">
-        <h3 class="promo-headline">Join Our In-Store VIP List</h3>
-        <p class="promo-subtext">Get special perks &amp; private announcements.</p>
-        <a href="#" class="promo-btn">Join Now</a>
-      </div>
-    </div>
-    -->
 
     <!-- 4. SECONDARY ACTION BUTTONS (Stacked Cards) -->
     <section class="secondary-actions-section" aria-label="Secondary Actions">
@@ -176,7 +192,8 @@
 
   </main>
 
-  <script src="script.js"></script>
+  <!-- Non-blocking deferred script -->
+  <script src="script.js" defer></script>
 </body>
 
 </html>

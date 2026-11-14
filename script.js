@@ -1,32 +1,31 @@
 /**
- * LIGHTWEIGHT THEME CONTROLLER
- * Saves theme preference (dark/light) in localStorage.
+ * ULTRA-LIGHTWEIGHT THEME CONTROLLER
+ * Zero-dependency, private-browsing safe, mobile optimized.
  */
+(() => {
+  const initTheme = () => {
+    const htmlEl = document.documentElement;
+    const toggleBtn = document.getElementById("themeToggleBtn");
+    if (!toggleBtn) return;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const htmlEl = document.documentElement;
-  const themeToggleBtn = document.getElementById("themeToggleBtn");
-
-    const getSavedTheme = () => {
-      return localStorage.getItem("preferred-theme") || "light";
-    };
-
-    const applyTheme = (theme) => {
-      htmlEl.setAttribute("data-theme", theme);
-      localStorage.setItem("preferred-theme", theme);
-      const metaTheme = document.querySelector('meta[name="theme-color"]');
-      if (metaTheme) {
-        metaTheme.setAttribute("content", theme === "dark" ? "#0b0f19" : "#f8fafc");
-      }
-    };
-
-    applyTheme(getSavedTheme());
-
-    if (themeToggleBtn) {
-      themeToggleBtn.addEventListener("click", () => {
+      toggleBtn.addEventListener("click", () => {
         const current = htmlEl.getAttribute("data-theme") || "light";
         const next = current === "light" ? "dark" : "light";
-        applyTheme(next);
-      });
-    }
-  });
+        htmlEl.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("preferred-theme", next);
+        } catch (e) { }
+
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) {
+              meta.setAttribute("content", next === "dark" ? "#0b111a" : "#f8fafc");
+            }
+        });
+    };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTheme, { once: true });
+  } else {
+    initTheme();
+  }
+})();
